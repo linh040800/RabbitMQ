@@ -36,7 +36,7 @@ namespace Hub.EventBus.Main.Controllers
 
         static async Task WaitAndApologizeAsync()
         {
-            await Task.Delay(2000);
+            await Task.Delay(1000);
 
             Console.WriteLine("Sorry for the delay...\n");
         }
