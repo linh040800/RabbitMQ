@@ -34,6 +34,13 @@ namespace Hub.EventBus.Main.Controllers
             _eventBus = eventBus;
         }
 
+        static async Task WaitAndApologizeAsync()
+        {
+            await Task.Delay(2000);
+
+            Console.WriteLine("Sorry for the delay...\n");
+        }
+
 
         [Route("checkout")]
         [HttpPost]
@@ -67,7 +74,15 @@ namespace Hub.EventBus.Main.Controllers
             // order creation process
             try
             {
-                _eventBus.Publish(eventMessage);
+                int i = 1000;
+                while (i> 0)
+                {
+                    _eventBus.Publish(eventMessage);
+                    await WaitAndApologizeAsync();
+
+                    i--;
+
+                }
             }
             catch (Exception ex)
             {
