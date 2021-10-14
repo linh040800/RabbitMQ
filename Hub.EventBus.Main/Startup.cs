@@ -4,6 +4,7 @@ using EventBus.Abstractions;
 using EventBusRabbitMQ;
 using Hub.EventBus.Main.Common;
 using Hub.EventBus.Main.IntegrationEvents.Events;
+using Hub.EventBus.Main.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -49,6 +50,8 @@ namespace RM01
 
             RegisterEventBus(services);
 
+
+            services.AddTransient<IBasketRepository, RedisBasketRepository>();
 
         }
 
@@ -161,8 +164,11 @@ namespace RM01
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
 
-            eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
+            //eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
             //eventBus.Subscribe<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
+
+
+            eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
         }
     }
 

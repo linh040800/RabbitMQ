@@ -1,4 +1,5 @@
 ﻿using EventBus.Events;
+using Hub.EventBus.Main.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,15 +37,16 @@ namespace Hub.EventBus.Main.IntegrationEvents.Events
 
         //public string Buyer { get; init; }
 
-        //public Guid RequestId { get; init; }
+        public Guid RequestId { get; init; }
 
-        //public CustomerBasket Basket { get; }
+        public CustomerBasket Basket { get; }
 
         public UserCheckoutAcceptedIntegrationEvent(string userId
             //, string userName, string city, string street,
             //string state, string country, string zipCode, string cardNumber, string cardHolderName,
-            //DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer, Guid requestId,
-            //CustomerBasket basket
+            //DateTime cardExpiration, string cardSecurityNumber, int cardTypeId, string buyer
+            , Guid requestId,
+            CustomerBasket basket
             )
         {
             UserId = userId;
@@ -60,8 +62,8 @@ namespace Hub.EventBus.Main.IntegrationEvents.Events
             //CardSecurityNumber = cardSecurityNumber;
             //CardTypeId = cardTypeId;
             //Buyer = buyer;
-            //Basket = basket;
-            //RequestId = requestId;
+            Basket = basket;
+            RequestId = requestId;
         }
 
     }

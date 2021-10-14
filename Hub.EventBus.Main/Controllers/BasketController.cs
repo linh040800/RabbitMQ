@@ -1,5 +1,6 @@
 ﻿using EventBus.Abstractions;
 using Hub.EventBus.Main.IntegrationEvents.Events;
+using Hub.EventBus.Main.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,15 +22,16 @@ namespace Hub.EventBus.Main.Controllers
         //}
 
         private readonly IEventBus _eventBus;
+        private readonly IBasketRepository _repository;
 
         public BasketController(
            //ILogger<BasketController> logger,
-           //IBasketRepository repository,
+           IBasketRepository repository,
            //IIdentityService identityService,
            IEventBus eventBus)
         {
             //_logger = logger;
-            //_repository = repository;
+            _repository = repository;
             //_identityService = identityService;
             _eventBus = eventBus;
         }
@@ -46,15 +48,15 @@ namespace Hub.EventBus.Main.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> CheckoutAsync(/*[FromBody] BasketCheckout basketCheckout, */[FromHeader(Name = "x-requestid")] string requestId)
+        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout, [FromHeader(Name = "x-requestid")] string requestId)
         {
             //var userId = _identityService.GetUserIdentity();
             var userId = "xxx";
 
-            //basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
-            //    guid : basketCheckout.RequestId;
+            basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
+                guid : basketCheckout.RequestId;
 
-            //var basket = await _repository.GetBasketAsync(userId);
+            var basket = await _repository.GetBasketAsync(userId);
 
             //if (basket == null)
             //{
@@ -66,7 +68,8 @@ namespace Hub.EventBus.Main.Controllers
             var eventMessage = new UserCheckoutAcceptedIntegrationEvent(userId
                 //, userName, basketCheckout.City, basketCheckout.Street,
                 //basketCheckout.State, basketCheckout.Country, basketCheckout.ZipCode, basketCheckout.CardNumber, basketCheckout.CardHolderName,
-                //basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer, basketCheckout.RequestId, basket
+                //basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer
+                , basketCheckout.RequestId, basket
                 );
 
             // Once basket is checkout, sends an integration event to
