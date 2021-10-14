@@ -2,22 +2,16 @@ using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
-using Hub.EventBus.Main.Common;
 using Hub.EventBus.Main.IntegrationEvents.Events;
 using Hub.EventBus.Main.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RM01
 {
@@ -46,10 +40,7 @@ namespace RM01
 
             services.AddCustomHealthCheck(Configuration);
 
-
-
             RegisterEventBus(services);
-
 
             services.AddTransient<IBasketRepository, RedisBasketRepository>();
 
@@ -99,7 +90,6 @@ namespace RM01
 
 
             ConfigureEventBus(app);
-
 
         }
 
@@ -155,20 +145,12 @@ namespace RM01
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
-
-            services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
-            //services.AddTransient<OrderStartedIntegrationEventHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
-
-            //eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
-            //eventBus.Subscribe<OrderStartedIntegrationEvent, OrderStartedIntegrationEventHandler>();
-
-
-            eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
+            eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent,IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
         }
     }
 

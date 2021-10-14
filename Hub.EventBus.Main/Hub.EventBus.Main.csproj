@@ -5,6 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Middlewares\**" />
+    <Content Remove="Middlewares\**" />
+    <EmbeddedResource Remove="Middlewares\**" />
+    <None Remove="Middlewares\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="IntegrationEvents\CatalogIntegrationEventService.cs" />
+    <Compile Remove="IntegrationEvents\EventHandling\OrderStatusChangedToAwaitingValidationIntegrationEventHandler.cs" />
+    <Compile Remove="IntegrationEvents\EventHandling\OrderStatusChangedToPaidIntegrationEventHandler.cs" />
+    <Compile Remove="IntegrationEvents\Events\OrderStatusChangedToAwaitingValidationIntegrationEvent.cs" />
+    <Compile Remove="IntegrationEvents\Events\OrderStatusChangedToPaidIntegrationEvent.cs" />
+    <Compile Remove="IntegrationEvents\Events\OrderStockConfirmedIntegrationEvent.cs" />
+    <Compile Remove="IntegrationEvents\Events\OrderStockRejectedIntegrationEvent.cs" />
+    <Compile Remove="IntegrationEvents\Events\ProductPriceChangedIntegrationEventHandler.cs" />
+    <Compile Remove="IntegrationEvents\ICatalogIntegrationEventService.cs" />
     <Compile Remove="Startup.Swagger.cs" />
   </ItemGroup>
 
@@ -33,6 +49,10 @@
 	  <PackageReference Include="Serilog.Sinks.Http" Version="7.2.0" />
 	  <PackageReference Include="Serilog.Sinks.Seq" Version="4.1.0-dev-00166" />
 	  <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="IntegrationEvents\EventHandling\" />
   </ItemGroup>
 
 </Project>

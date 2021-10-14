@@ -10,6 +10,9 @@ using System.Net.Sockets;
 
 namespace EventBusRabbitMQ
 {
+    /// <summary>
+    /// Manage connection and event lisstener to process after ConnectionShutdown
+    /// </summary>
     public class DefaultRabbitMQPersistentConnection
        : IRabbitMQPersistentConnection
     {
