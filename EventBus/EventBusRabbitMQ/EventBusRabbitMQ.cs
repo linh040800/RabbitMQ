@@ -67,11 +67,10 @@ namespace EventBusRabbitMQ
 
         public void Publish(IntegrationEvent @event)
         {
-            if (!_persistentConnection.IsConnected)
-            {
-                _persistentConnection.TryConnect();
-            }
+            //initialize connection if connection is not connected
+            if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
+            //initialize RetrySyntax object to prepare call Execute function for publish message to queue (with retry 5 times)
             var policy = RetryPolicy.Handle<BrokerUnreachableException>()
                 .Or<SocketException>()
                 .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
@@ -83,6 +82,7 @@ namespace EventBusRabbitMQ
 
             _logger.LogTrace("Creating RabbitMQ channel to publish event: {EventId} ({EventName})", @event.Id, eventName);
 
+            //Create channel to prepare publish message
             using (var channel = _persistentConnection.CreateModel())
             {
                 _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
@@ -94,6 +94,7 @@ namespace EventBusRabbitMQ
                     WriteIndented = true
                 });
 
+                //Perform to call Execute funtion to publish a message into queue with routing key is eventName.
                 policy.Execute(() =>
                 {
                     var properties = channel.CreateBasicProperties();
@@ -126,14 +127,22 @@ namespace EventBusRabbitMQ
             where TH : IIntegrationEventHandler<T>
         {
             var eventName = _subsManager.GetEventKey<T>();
+            //1. Bind eventName(routingKey) into _queueName of _consumerChannel
             DoInternalSubscription(eventName);
 
             _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
+            //2. add event name into Dictionary management
             _subsManager.AddSubscription<T, TH>();
+
+            //3. Start to consume receive message
             StartBasicConsume();
         }
 
+        /// <summary>
+        /// Bind eventName (routingKey) into _queueName of _consumerChannel
+        /// </summary>
+        /// <param name="eventName"></param>
         private void DoInternalSubscription(string eventName)
         {
             var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
@@ -183,9 +192,12 @@ namespace EventBusRabbitMQ
 
             if (_consumerChannel != null)
             {
+                //init AsyncEventingBasicConsumer object to receive message
                 var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
 
+                //4. add Consumer_Received event into Consumer object
                 consumer.Received += Consumer_Received;
+
 
                 _consumerChannel.BasicConsume(
                     queue: _queueName,
@@ -205,11 +217,9 @@ namespace EventBusRabbitMQ
 
             try
             {
-                if (message.ToLowerInvariant().Contains("throw-fake-exception"))
-                {
-                    throw new InvalidOperationException($"Fake exception requested: \"{message}\"");
-                }
+                if (message.ToLowerInvariant().Contains("throw-fake-exception")) throw new InvalidOperationException($"Fake exception requested: \"{message}\"");
 
+                //5.  return message by Invokes the method has arose Subscriptions
                 await ProcessEvent(eventName, message);
             }
             catch (Exception ex)
@@ -217,9 +227,7 @@ namespace EventBusRabbitMQ
                 _logger.LogWarning(ex, "----- ERROR Processing message \"{Message}\"", message);
             }
 
-            // Even on exception we take the message off the queue.
-            // in a REAL WORLD app this should be handled with a Dead Letter Exchange (DLX). 
-            // For more information see: https://www.rabbitmq.com/dlx.html
+            //confirm multiple message: false
             _consumerChannel.BasicAck(eventArgs.DeliveryTag, multiple: false);
         }
 
@@ -255,6 +263,12 @@ namespace EventBusRabbitMQ
             return channel;
         }
 
+        /// <summary>
+        /// return Json message for Subscribed function
+        /// </summary>
+        /// <param name="eventName"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
         private async Task ProcessEvent(string eventName, string message)
         {
             _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);

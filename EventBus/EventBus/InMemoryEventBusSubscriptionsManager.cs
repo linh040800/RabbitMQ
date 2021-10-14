@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace EventBus
 {
+    /// <summary>
+    /// Manage event name in Dictionary variable
+    /// </summary>
     public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
     {
-
-
         private readonly Dictionary<string, List<SubscriptionInfo>> _handlers;
         private readonly List<Type> _eventTypes;
 
@@ -46,6 +47,12 @@ namespace EventBus
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="handlerType"></param>
+        /// <param name="eventName"></param>
+        /// <param name="isDynamic"></param>
         private void DoAddSubscription(Type handlerType, string eventName, bool isDynamic)
         {
             if (!HasSubscriptionsForEvent(eventName))

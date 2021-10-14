@@ -50,7 +50,7 @@ namespace Hub.EventBus.Main.Models
             var x = new List<BasketItem>();
             x.Add(new BasketItem() { Id = "2222" });
             var data = new CustomerBasket();
-            data.BuyerId = "xxx";
+            data.BuyerId = customerId;
             data.Items = x;
             var hani = JsonSerializer.Serialize<CustomerBasket>(data);
 

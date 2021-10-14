@@ -48,10 +48,10 @@ namespace Hub.EventBus.Main.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout, [FromHeader(Name = "x-requestid")] string requestId)
+        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout,string userName, [FromHeader(Name = "x-requestid")] string requestId)
         {
             //var userId = _identityService.GetUserIdentity();
-            var userId = "xxx";
+            var userId = userName;
 
             basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
                 guid : basketCheckout.RequestId;
@@ -77,13 +77,13 @@ namespace Hub.EventBus.Main.Controllers
             // order creation process
             try
             {
-                int i = 1000;
-                while (i> 0)
+                //int i = 1;
+                //while (i> 0)
                 {
                     _eventBus.Publish(eventMessage);
-                    await WaitAndApologizeAsync();
+                    //await WaitAndApologizeAsync();
 
-                    i--;
+                    //i--;
 
                 }
             }
