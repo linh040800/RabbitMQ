@@ -80,10 +80,17 @@ namespace Hub.EventBus.Main.Controllers
                 //int i = 1;
                 //while (i> 0)
                 {
-                    _eventBus.Publish(eventMessage);
+                    //_eventBus.Publish(eventMessage);
                     //await WaitAndApologizeAsync();
 
                     //i--;
+
+
+                    var eventMessageUpdateProduct = new ProductPriceChangedIntegrationEvent(1, 5, 1111);
+                    _eventBus.Publish(eventMessageUpdateProduct);
+
+
+
 
                 }
             }

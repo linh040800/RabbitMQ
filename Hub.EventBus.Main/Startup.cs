@@ -2,6 +2,7 @@ using Autofac;
 using EventBus;
 using EventBus.Abstractions;
 using EventBusRabbitMQ;
+using Hub.EventBus.Main.IntegrationEvents.EventHandling;
 using Hub.EventBus.Main.IntegrationEvents.Events;
 using Hub.EventBus.Main.Models;
 using Microsoft.AspNetCore.Builder;
@@ -145,12 +146,15 @@ namespace RM01
             });
 
             services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
+
+            services.AddTransient<ProductPriceChangedIntegrationEventHandler>();
         }
 
         private void ConfigureEventBus(IApplicationBuilder app)
         {
             var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
             eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent,IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
+            eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
         }
     }
 

@@ -48,7 +48,7 @@ namespace Hub.EventBus.Main.Models
             //}
 
             var x = new List<BasketItem>();
-            x.Add(new BasketItem() { Id = "2222" });
+            x.Add(new BasketItem() { Id = "1",ProductId=1,UnitPrice=1111,OldUnitPrice=2222 });
             var data = new CustomerBasket();
             data.BuyerId = customerId;
             data.Items = x;
