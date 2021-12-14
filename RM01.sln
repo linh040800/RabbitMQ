@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventBus", "EventBus", "{7B3D1DA8-DB31-4D95-908D-A58AFC8F5421}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBus", "EventBus\EventBus\EventBus.csproj", "{5EA8EFDD-9BF7-42C8-8FD9-BC315AC091AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub.EventBus", "EventBus\EventBus\Hub.EventBus.csproj", "{5EA8EFDD-9BF7-42C8-8FD9-BC315AC091AB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventBusRabbitMQ", "EventBus\EventBusRabbitMQ\EventBusRabbitMQ.csproj", "{76F0F588-D3EC-4DFC-8098-B39E8FC2843B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub.EventBusRabbitMQ", "EventBus\EventBusRabbitMQ\Hub.EventBusRabbitMQ.csproj", "{76F0F588-D3EC-4DFC-8098-B39E8FC2843B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hub.EventBus.Main", "Hub.EventBus.Main\Hub.EventBus.Main.csproj", "{0C579707-697A-43D9-853E-CBBD9AE5F798}"
 EndProject

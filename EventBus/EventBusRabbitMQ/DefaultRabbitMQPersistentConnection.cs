@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Hub.EventBusRabbitMQ.Abstractions;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -8,13 +9,12 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace EventBusRabbitMQ
+namespace Hub.EventBusRabbitMQ
 {
     /// <summary>
     /// Manage connection and event lisstener to process after ConnectionShutdown
     /// </summary>
-    public class DefaultRabbitMQPersistentConnection
-       : IRabbitMQPersistentConnection
+    public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
     {
         private readonly IConnectionFactory _connectionFactory;
         private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
@@ -41,11 +41,7 @@ namespace EventBusRabbitMQ
 
         public IModel CreateModel()
         {
-            if (!IsConnected)
-            {
-                throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
-            }
-
+            if (!IsConnected) throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
             return _connection.CreateModel();
         }
 
@@ -81,8 +77,7 @@ namespace EventBusRabbitMQ
 
                 policy.Execute(() =>
                 {
-                    _connection = _connectionFactory
-                          .CreateConnection();
+                    _connection = _connectionFactory.CreateConnection();
                 });
 
                 if (IsConnected)

@@ -1,12 +1,10 @@
-﻿using EventBus.Abstractions;
-using EventBus.Events;
+﻿using Hub.EventBus.Abstractions;
+using Hub.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EventBus
+namespace Hub.EventBus
 {
     /// <summary>
     /// Manage event name in Dictionary variable
@@ -27,24 +25,16 @@ namespace EventBus
         public bool IsEmpty => !_handlers.Keys.Any();
         public void Clear() => _handlers.Clear();
 
-        public void AddDynamicSubscription<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
+        public void AddDynamicSubscription<TH>(string eventName) where TH : IDynamicIntegrationEventHandler
         {
             DoAddSubscription(typeof(TH), eventName, isDynamic: true);
         }
 
-        public void AddSubscription<T, TH>()
-            where T : IntegrationEvent
-            where TH : IIntegrationEventHandler<T>
+        public void AddSubscription<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
         {
             var eventName = GetEventKey<T>();
-
             DoAddSubscription(typeof(TH), eventName, isDynamic: false);
-
-            if (!_eventTypes.Contains(typeof(T)))
-            {
-                _eventTypes.Add(typeof(T));
-            }
+            if (!_eventTypes.Contains(typeof(T))) _eventTypes.Add(typeof(T));
         }
 
         /// <summary>
@@ -55,45 +45,23 @@ namespace EventBus
         /// <param name="isDynamic"></param>
         private void DoAddSubscription(Type handlerType, string eventName, bool isDynamic)
         {
-            if (!HasSubscriptionsForEvent(eventName))
-            {
-                _handlers.Add(eventName, new List<SubscriptionInfo>());
-            }
-
-            if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
-            {
-                throw new ArgumentException(
-                    $"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
-            }
-
-            if (isDynamic)
-            {
-                _handlers[eventName].Add(SubscriptionInfo.Dynamic(handlerType));
-            }
-            else
-            {
-                _handlers[eventName].Add(SubscriptionInfo.Typed(handlerType));
-            }
+            if (!HasSubscriptionsForEvent(eventName)) _handlers.Add(eventName, new List<SubscriptionInfo>());
+            if (_handlers[eventName].Any(s => s.HandlerType == handlerType)) throw new ArgumentException($"Handler Type {handlerType.Name} already registered for '{eventName}'", nameof(handlerType));
+            _handlers[eventName].Add(isDynamic ? SubscriptionInfo.Dynamic(handlerType) : SubscriptionInfo.Typed(handlerType));
         }
 
-
-        public void RemoveDynamicSubscription<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
+        public void RemoveDynamicSubscription<TH>(string eventName) where TH : IDynamicIntegrationEventHandler
         {
             var handlerToRemove = FindDynamicSubscriptionToRemove<TH>(eventName);
             DoRemoveHandler(eventName, handlerToRemove);
         }
 
-
-        public void RemoveSubscription<T, TH>()
-            where TH : IIntegrationEventHandler<T>
-            where T : IntegrationEvent
+        public void RemoveSubscription<T, TH>() where TH : IIntegrationEventHandler<T> where T : IntegrationEvent
         {
             var handlerToRemove = FindSubscriptionToRemove<T, TH>();
             var eventName = GetEventKey<T>();
             DoRemoveHandler(eventName, handlerToRemove);
         }
-
 
         private void DoRemoveHandler(string eventName, SubscriptionInfo subsToRemove)
         {
@@ -104,13 +72,9 @@ namespace EventBus
                 {
                     _handlers.Remove(eventName);
                     var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
-                    if (eventType != null)
-                    {
-                        _eventTypes.Remove(eventType);
-                    }
+                    if (eventType != null) _eventTypes.Remove(eventType);
                     RaiseOnEventRemoved(eventName);
                 }
-
             }
         }
 
@@ -128,16 +92,12 @@ namespace EventBus
         }
 
 
-        private SubscriptionInfo FindDynamicSubscriptionToRemove<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
+        private SubscriptionInfo FindDynamicSubscriptionToRemove<TH>(string eventName) where TH : IDynamicIntegrationEventHandler
         {
             return DoFindSubscriptionToRemove(eventName, typeof(TH));
         }
 
-
-        private SubscriptionInfo FindSubscriptionToRemove<T, TH>()
-             where T : IntegrationEvent
-             where TH : IIntegrationEventHandler<T>
+        private SubscriptionInfo FindSubscriptionToRemove<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
         {
             var eventName = GetEventKey<T>();
             return DoFindSubscriptionToRemove(eventName, typeof(TH));
@@ -145,11 +105,7 @@ namespace EventBus
 
         private SubscriptionInfo DoFindSubscriptionToRemove(string eventName, Type handlerType)
         {
-            if (!HasSubscriptionsForEvent(eventName))
-            {
-                return null;
-            }
-
+            if (!HasSubscriptionsForEvent(eventName)) return null;
             return _handlers[eventName].SingleOrDefault(s => s.HandlerType == handlerType);
 
         }

@@ -1,27 +1,24 @@
-﻿using EventBus.Abstractions;
-using EventBus.Events;
+﻿using Hub.EventBus.Abstractions;
+using Hub.EventBus.Events;
 using System;
 using System.Collections.Generic;
-using static EventBus.InMemoryEventBusSubscriptionsManager;
+using static Hub.EventBus.InMemoryEventBusSubscriptionsManager;
 
-namespace EventBus
+namespace Hub.EventBus
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface IEventBusSubscriptionsManager
     {
         bool IsEmpty { get; }
         event EventHandler<string> OnEventRemoved;
-        void AddDynamicSubscription<TH>(string eventName)
-           where TH : IDynamicIntegrationEventHandler;
+        void AddDynamicSubscription<TH>(string eventName) where TH : IDynamicIntegrationEventHandler;
 
-        void AddSubscription<T, TH>()
-           where T : IntegrationEvent
-           where TH : IIntegrationEventHandler<T>;
+        void AddSubscription<T, TH>()  where T : IntegrationEvent where TH : IIntegrationEventHandler<T>;
 
-        void RemoveSubscription<T, TH>()
-             where TH : IIntegrationEventHandler<T>
-             where T : IntegrationEvent;
-        void RemoveDynamicSubscription<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler;
+        void RemoveSubscription<T, TH>() where TH : IIntegrationEventHandler<T> where T : IntegrationEvent;
+        void RemoveDynamicSubscription<TH>(string eventName) where TH : IDynamicIntegrationEventHandler;
 
         bool HasSubscriptionsForEvent<T>() where T : IntegrationEvent;
         bool HasSubscriptionsForEvent(string eventName);

@@ -1,10 +1,8 @@
-﻿using EventBus.Abstractions;
+﻿using Hub.EventBus.Abstractions;
 using Hub.EventBus.Main.IntegrationEvents.Events;
 using Hub.EventBus.Main.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -48,13 +46,13 @@ namespace Hub.EventBus.Main.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout,string userName, [FromHeader(Name = "x-requestid")] string requestId)
+        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout,string userName, [FromHeader(Name = "x-requestid")] Guid requestId= new Guid())
         {
             //var userId = _identityService.GetUserIdentity();
             var userId = userName;
 
-            basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ?
-                guid : basketCheckout.RequestId;
+            basketCheckout.RequestId = (requestId != Guid.Empty) ? requestId : basketCheckout.RequestId;
+            //basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ? guid : basketCheckout.RequestId;
 
             var basket = await _repository.GetBasketAsync(userId);
 

@@ -1,8 +1,4 @@
-﻿using EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Hub.EventBus.Events;
 
 namespace Hub.EventBus.Main.IntegrationEvents.Events
 {

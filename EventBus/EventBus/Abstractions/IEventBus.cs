@@ -1,12 +1,10 @@
-﻿using EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Hub.EventBus.Events;
 
-namespace EventBus.Abstractions
+namespace Hub.EventBus.Abstractions
 {
+    /// <summary>
+    ///List of basic Eventbus methods
+    /// </summary>
     public interface IEventBus
     {
         void Publish(IntegrationEvent @event);

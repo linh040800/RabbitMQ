@@ -1,4 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Autofac;
+using Hub.EventBus;
+using Hub.EventBus.Abstractions;
+using Hub.EventBus.Events;
+using Hub.EventBus.Extensions;
+using Hub.EventBusRabbitMQ.Abstractions;
+using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
 using RabbitMQ.Client;
@@ -7,16 +13,14 @@ using RabbitMQ.Client.Exceptions;
 using System;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using EventBus.Abstractions;
-using Autofac;
-using EventBus;
-using EventBus.Events;
-using EventBus.Extensions;
+using System.Threading.Tasks;
 
-namespace EventBusRabbitMQ
+namespace Hub.EventBusRabbitMQ
 {
+    /// <summary>
+    /// Handler class publish and subscribe to events
+    /// </summary>
     public class EventBusRabbitMQ : IEventBus, IDisposable
     {
         const string BROKER_NAME = "eshop_event_bus";
@@ -46,17 +50,11 @@ namespace EventBusRabbitMQ
 
         private void SubsManager_OnEventRemoved(object sender, string eventName)
         {
-            if (!_persistentConnection.IsConnected)
-            {
-                _persistentConnection.TryConnect();
-            }
+            if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
             using (var channel = _persistentConnection.CreateModel())
             {
-                channel.QueueUnbind(queue: _queueName,
-                    exchange: BROKER_NAME,
-                    routingKey: eventName);
-
+                channel.QueueUnbind(queue: _queueName,exchange: BROKER_NAME,routingKey: eventName);
                 if (_subsManager.IsEmpty)
                 {
                     _queueName = string.Empty;
@@ -86,13 +84,8 @@ namespace EventBusRabbitMQ
             using (var channel = _persistentConnection.CreateModel())
             {
                 _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
-
                 channel.ExchangeDeclare(exchange: BROKER_NAME, type: "direct");
-
-                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
+                var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions {WriteIndented = true});
 
                 //Perform to call Execute funtion to publish a message into queue with routing key is eventName.
                 policy.Execute(() =>
@@ -102,12 +95,7 @@ namespace EventBusRabbitMQ
 
                     _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
 
-                    channel.BasicPublish(
-                        exchange: BROKER_NAME,
-                        routingKey: eventName,
-                        mandatory: true,
-                        basicProperties: properties,
-                        body: body);
+                    channel.BasicPublish(exchange: BROKER_NAME,routingKey: eventName,mandatory: true,basicProperties: properties,body: body);
                 });
             }
         }
@@ -148,41 +136,27 @@ namespace EventBusRabbitMQ
             var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
             if (!containsKey)
             {
-                if (!_persistentConnection.IsConnected)
-                {
-                    _persistentConnection.TryConnect();
-                }
+                if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
-                _consumerChannel.QueueBind(queue: _queueName,
-                                    exchange: BROKER_NAME,
-                                    routingKey: eventName);
+                _consumerChannel.QueueBind(queue: _queueName,exchange: BROKER_NAME,routingKey: eventName);
             }
         }
 
-        public void Unsubscribe<T, TH>()
-            where T : IntegrationEvent
-            where TH : IIntegrationEventHandler<T>
+        public void Unsubscribe<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
         {
             var eventName = _subsManager.GetEventKey<T>();
-
             _logger.LogInformation("Unsubscribing from event {EventName}", eventName);
-
             _subsManager.RemoveSubscription<T, TH>();
         }
 
-        public void UnsubscribeDynamic<TH>(string eventName)
-            where TH : IDynamicIntegrationEventHandler
+        public void UnsubscribeDynamic<TH>(string eventName) where TH : IDynamicIntegrationEventHandler
         {
             _subsManager.RemoveDynamicSubscription<TH>(eventName);
         }
 
         public void Dispose()
         {
-            if (_consumerChannel != null)
-            {
-                _consumerChannel.Dispose();
-            }
-
+            if (_consumerChannel != null) _consumerChannel.Dispose();
             _subsManager.Clear();
         }
 
@@ -198,16 +172,9 @@ namespace EventBusRabbitMQ
                 //4. add Consumer_Received event into Consumer object
                 consumer.Received += Consumer_Received;
 
-
-                _consumerChannel.BasicConsume(
-                    queue: _queueName,
-                    autoAck: false,
-                    consumer: consumer);
+                _consumerChannel.BasicConsume(queue: _queueName,autoAck: false,consumer: consumer);
             }
-            else
-            {
-                _logger.LogError("StartBasicConsume can't call on _consumerChannel == null");
-            }
+            else _logger.LogError("StartBasicConsume can't call on _consumerChannel == null");
         }
 
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs eventArgs)
@@ -218,7 +185,6 @@ namespace EventBusRabbitMQ
             try
             {
                 if (message.ToLowerInvariant().Contains("throw-fake-exception")) throw new InvalidOperationException($"Fake exception requested: \"{message}\"");
-
                 //5.  return message by Invokes the method has arose Subscriptions
                 await ProcessEvent(eventName, message);
             }
@@ -233,28 +199,17 @@ namespace EventBusRabbitMQ
 
         private IModel CreateConsumerChannel()
         {
-            if (!_persistentConnection.IsConnected)
-            {
-                _persistentConnection.TryConnect();
-            }
-
+            if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
+            
             _logger.LogTrace("Creating RabbitMQ consumer channel");
-
             var channel = _persistentConnection.CreateModel();
+            channel.ExchangeDeclare(exchange: BROKER_NAME,type: "direct");
 
-            channel.ExchangeDeclare(exchange: BROKER_NAME,
-                                    type: "direct");
-
-            channel.QueueDeclare(queue: _queueName,
-                                 durable: true,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
+            channel.QueueDeclare(queue: _queueName,durable: true,exclusive: false,autoDelete: false,arguments: null);
 
             channel.CallbackException += (sender, ea) =>
             {
                 _logger.LogWarning(ea.Exception, "Recreating RabbitMQ consumer channel");
-
                 _consumerChannel.Dispose();
                 _consumerChannel = CreateConsumerChannel();
                 StartBasicConsume();

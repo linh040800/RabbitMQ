@@ -1,11 +1,7 @@
-﻿using EventBus.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Hub.EventBus.Events;
 using System.Threading.Tasks;
 
-namespace EventBus.Abstractions
+namespace Hub.EventBus.Abstractions
 {
     public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
         where TIntegrationEvent : IntegrationEvent

@@ -1,10 +1,8 @@
-﻿using EventBus.Abstractions;
+﻿using Hub.EventBus.Abstractions;
 using Hub.EventBus.Main.IntegrationEvents.Events;
 using Hub.EventBus.Main.Models;
 using Microsoft.Extensions.Logging;
-using Serilog.Context;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

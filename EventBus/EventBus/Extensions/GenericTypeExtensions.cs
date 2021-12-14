@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EventBus.Extensions
+namespace Hub.EventBus.Extensions
 {
     public static class GenericTypeExtensions
     {
@@ -17,10 +14,7 @@ namespace EventBus.Extensions
                 var genericTypes = string.Join(",", type.GetGenericArguments().Select(t => t.Name).ToArray());
                 typeName = $"{type.Name.Remove(type.Name.IndexOf('`'))}<{genericTypes}>";
             }
-            else
-            {
-                typeName = type.Name;
-            }
+            else typeName = type.Name;
 
             return typeName;
         }
