@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace Hub.EventBus.Events
+namespace PO.EventBus.Events
 {
     /// <summary>
     /// Event model 

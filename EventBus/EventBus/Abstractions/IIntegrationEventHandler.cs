@@ -1,7 +1,7 @@
-﻿using Hub.EventBus.Events;
+﻿using PO.EventBus.Events;
 using System.Threading.Tasks;
 
-namespace Hub.EventBus.Abstractions
+namespace PO.EventBus.Abstractions
 {
     public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
         where TIntegrationEvent : IntegrationEvent

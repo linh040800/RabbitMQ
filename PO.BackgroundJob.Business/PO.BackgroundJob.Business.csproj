@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PO.BackgroundJob.Business.Interfaces\PO.BackgroundJob.Business.Interfaces.csproj" />
+    <ProjectReference Include="..\PO.BackgroundJob.Repository.Interfaces\PO.BackgroundJob.Repository.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

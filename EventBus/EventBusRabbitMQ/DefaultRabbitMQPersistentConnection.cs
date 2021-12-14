@@ -1,4 +1,4 @@
-﻿using Hub.EventBusRabbitMQ.Abstractions;
+﻿using PO.EventBusRabbitMQ.Abstractions;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-namespace Hub.EventBusRabbitMQ
+namespace PO.EventBusRabbitMQ
 {
     /// <summary>
     /// Manage connection and event lisstener to process after ConnectionShutdown

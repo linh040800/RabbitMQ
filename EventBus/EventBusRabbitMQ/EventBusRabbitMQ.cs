@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using Hub.EventBus;
-using Hub.EventBus.Abstractions;
-using Hub.EventBus.Events;
-using Hub.EventBus.Extensions;
-using Hub.EventBusRabbitMQ.Abstractions;
+using PO.EventBus;
+using PO.EventBus.Abstractions;
+using PO.EventBus.Events;
+using PO.EventBus.Extensions;
+using PO.EventBusRabbitMQ.Abstractions;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
@@ -16,7 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Hub.EventBusRabbitMQ
+namespace PO.EventBusRabbitMQ
 {
     /// <summary>
     /// Handler class publish and subscribe to events

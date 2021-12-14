@@ -1,6 +1,6 @@
-﻿using Hub.EventBus.Events;
+﻿using PO.EventBus.Events;
 
-namespace Hub.EventBus.Abstractions
+namespace PO.EventBus.Abstractions
 {
     /// <summary>
     ///List of basic Eventbus methods

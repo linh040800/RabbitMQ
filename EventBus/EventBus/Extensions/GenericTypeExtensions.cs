@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Hub.EventBus.Extensions
+namespace PO.EventBus.Extensions
 {
     public static class GenericTypeExtensions
     {

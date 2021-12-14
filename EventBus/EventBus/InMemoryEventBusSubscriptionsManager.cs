@@ -1,10 +1,10 @@
-﻿using Hub.EventBus.Abstractions;
-using Hub.EventBus.Events;
+﻿using PO.EventBus.Abstractions;
+using PO.EventBus.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hub.EventBus
+namespace PO.EventBus
 {
     /// <summary>
     /// Manage event name in Dictionary variable

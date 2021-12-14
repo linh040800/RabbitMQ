@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Hub.EventBus.Abstractions
+namespace PO.EventBus.Abstractions
 {
     public interface IDynamicIntegrationEventHandler
     {
