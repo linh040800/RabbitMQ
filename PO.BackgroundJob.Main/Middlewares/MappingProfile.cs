@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PO.BackgroundJob.Main.Middlewares
 {
@@ -11,7 +8,6 @@ namespace PO.BackgroundJob.Main.Middlewares
         public MappingProfile()
         {
             AllowNullDestinationValues = true;
-
             this.AddPOMappingProfile();
         }
     }

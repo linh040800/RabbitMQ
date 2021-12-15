@@ -4,7 +4,7 @@ using PO.BackgroundJob.Entities;
 
 namespace PO.BackgroundJob.Repository.Interfaces
 {
-    public interface IPO_OrderManager : IPO_BaseManager<PO_Order>
+    public interface IPO_OrdersManager : IPO_BaseManager<PO_Orders>
     {
     }
 }

@@ -127,6 +127,20 @@ namespace PO.EventBusRabbitMQ
             StartBasicConsume();
         }
 
+        public void InitPublish<T, TH>()
+            where T : IntegrationEvent
+            where TH : IIntegrationEventHandler<T>
+        {
+            var eventName = _subsManager.GetEventKey<T>();
+            //1. Bind eventName(routingKey) into _queueName of _consumerChannel
+            DoInternalSubscription(eventName);
+
+            _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+
+            //2. add event name into Dictionary management
+            _subsManager.AddSubscription<T, TH>();
+        }
+
         /// <summary>
         /// Bind eventName (routingKey) into _queueName of _consumerChannel
         /// </summary>
@@ -138,6 +152,7 @@ namespace PO.EventBusRabbitMQ
             {
                 if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
+                //todo: hannv88: Create a eshop_event_bus exchange and bind OrdersIntegrationEvent routingKey
                 _consumerChannel.QueueBind(queue: _queueName,exchange: BROKER_NAME,routingKey: eventName);
             }
         }

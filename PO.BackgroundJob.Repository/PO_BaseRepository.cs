@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Newtonsoft.Json;
-using PO.BackgroundJob.Business.Repository.Base;
+using PO.BackgroundJob.Repository.Base;
 using PO.BackgroundJob.Entities.Base;
 using PO.BackgroundJob.Repository.Interfaces;
 using PO.Utilities;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using static System.Data.CommandType;
 
-namespace PO.BackgroundJob.Business.Repository
+namespace PO.BackgroundJob.Repository
 {
     public class PO_BaseRepository<TEntity> : IPO_BaseRepository<TEntity>, IDisposable where TEntity : class
     {

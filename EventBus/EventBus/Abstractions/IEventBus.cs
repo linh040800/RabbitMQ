@@ -9,6 +9,10 @@ namespace PO.EventBus.Abstractions
     {
         void Publish(IntegrationEvent @event);
 
+        void InitPublish<T, TH>()
+            where T : IntegrationEvent
+            where TH : IIntegrationEventHandler<T>;
+
         void Subscribe<T, TH>()
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>;

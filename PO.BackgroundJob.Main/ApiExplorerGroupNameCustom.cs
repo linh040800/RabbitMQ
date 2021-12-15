@@ -2,21 +2,21 @@
 using System;
 using System.Collections.Generic;
 
-namespace PO.EventBus.Main
+namespace PO.BackgroundJob.Main
 {
     public class ApiExplorerGroupNameCustom : IControllerModelConvention
     {
         /// <summary>
         /// 
         /// </summary>
-        public const string API_CORE = "api-core";
+        public const string API_PO = "api-PO";
 
         /// <summary>
         /// 
         /// </summary>
         public static List<string> groupName = new List<string>()
         {
-            API_CORE
+            API_PO
         };
 
         public static Dictionary<string, List<string>> DictionaryActionRoute = new Dictionary<string, List<string>>();

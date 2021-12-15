@@ -1,16 +1,20 @@
-﻿using PO.EventBus.Abstractions;
+﻿using Microsoft.AspNetCore.Mvc;
+using PO.EventBus.Abstractions;
 using PO.EventBus.Main.IntegrationEvents.Events;
 using PO.EventBus.Main.Models;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace PO.EventBus.Main.Controllers
 {
-    [Route("api/v1/[controller]")]
-    //[Authorize]
+    //[Route("api/v1/[controller]")]
+    ////[Authorize]
+    //[ApiController]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    //[Authorize]
 
     public class BasketController : ControllerBase
     {
@@ -46,15 +50,14 @@ namespace PO.EventBus.Main.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.Accepted)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout,string userName, [FromHeader(Name = "x-requestid")] Guid requestId= new Guid())
+        public async Task<ActionResult> CheckoutAsync([FromBody] BasketCheckout basketCheckout,string userName, [FromHeader(Name = "x-requestid")] string requestId)
         {
             //var userId = _identityService.GetUserIdentity();
-            var userId = userName;
+            //var userId = userName;
 
-            basketCheckout.RequestId = (requestId != Guid.Empty) ? requestId : basketCheckout.RequestId;
             //basketCheckout.RequestId = (Guid.TryParse(requestId, out Guid guid) && guid != Guid.Empty) ? guid : basketCheckout.RequestId;
 
-            var basket = await _repository.GetBasketAsync(userId);
+            //var basket = await _repository.GetBasketAsync(userId);
 
             //if (basket == null)
             //{
@@ -63,12 +66,12 @@ namespace PO.EventBus.Main.Controllers
 
             //var userName = this.HttpContext.User.FindFirst(x => x.Type == ClaimTypes.Name).Value;
 
-            var eventMessage = new UserCheckoutAcceptedIntegrationEvent(userId
-                //, userName, basketCheckout.City, basketCheckout.Street,
-                //basketCheckout.State, basketCheckout.Country, basketCheckout.ZipCode, basketCheckout.CardNumber, basketCheckout.CardHolderName,
-                //basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer
-                , basketCheckout.RequestId, basket
-                );
+            //var eventMessage = new UserCheckoutAcceptedIntegrationEvent(userId
+            //    //, userName, basketCheckout.City, basketCheckout.Street,
+            //    //basketCheckout.State, basketCheckout.Country, basketCheckout.ZipCode, basketCheckout.CardNumber, basketCheckout.CardHolderName,
+            //    //basketCheckout.CardExpiration, basketCheckout.CardSecurityNumber, basketCheckout.CardTypeId, basketCheckout.Buyer
+            //    , basketCheckout.RequestId, basket
+            //    );
 
             // Once basket is checkout, sends an integration event to
             // ordering.api to convert basket to order and proceeds with
@@ -84,7 +87,7 @@ namespace PO.EventBus.Main.Controllers
                     //i--;
 
 
-                    var eventMessageUpdateProduct = new ProductPriceChangedIntegrationEvent(1, 5, 1111);
+                    var eventMessageUpdateProduct = new ProductPriceChangedIntegrationEvent(1, 5, 1111, requestId);
                     _eventBus.Publish(eventMessageUpdateProduct);
 
 

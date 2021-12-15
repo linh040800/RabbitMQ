@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PO.BackgroundJob.Business.Repository.Base
+namespace PO.BackgroundJob.Repository.Base
 {
     public class SqlServerStorage: IDisposable
     {

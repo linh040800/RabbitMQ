@@ -25,6 +25,10 @@ namespace PO.EventBus.Events
         public Guid Id { get; private init; }
 
         [JsonInclude]
+        public string Method { get; private init; }
+
+        [JsonInclude]
         public DateTime CreationDate { get; private init; }
+
     }
 }

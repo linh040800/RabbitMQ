@@ -2,7 +2,7 @@
 
 namespace PO.BackgroundJob.Repository.Interfaces
 {
-    public interface IPO_OrderRepository : IPO_BaseRepository<PO_Order>
+    public interface IPO_OrdersRepository : IPO_BaseRepository<PO_Orders>
     {
     }
 }
