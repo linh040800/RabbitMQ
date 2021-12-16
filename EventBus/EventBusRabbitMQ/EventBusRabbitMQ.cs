@@ -181,12 +181,18 @@ namespace PO.EventBusRabbitMQ
 
             if (_consumerChannel != null)
             {
+                //To avoid a Consumer receiving too much without time to process, a Consumer that is too free to do so.Can we use the basicQos() option to tell RabbitMQ
+                //to send only 1 Message to the Consumer, when processing is complete, send the next Message
+                //_consumerChannel.BasicQos(prefetchSize: 0, prefetchCount: 1, false);
+
                 //init AsyncEventingBasicConsumer object to receive message
                 var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
 
                 //4. add Consumer_Received event into Consumer object
                 consumer.Received += Consumer_Received;
 
+                //autoAck: false: Consume completed process a message then Consume send ACK message to RabbitMQ for delete message
+                //else if true always remove message after RabbitMQ send message to consume                 
                 _consumerChannel.BasicConsume(queue: _queueName,autoAck: false,consumer: consumer);
             }
             else _logger.LogError("StartBasicConsume can't call on _consumerChannel == null");

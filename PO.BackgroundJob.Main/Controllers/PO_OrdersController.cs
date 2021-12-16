@@ -6,6 +6,7 @@ using PO.BackgroundJob.Main.Common;
 using PO.BackgroundJob.Main.IntegrationEvents.Events;
 using PO.BackgroundJob.Repository.Interfaces;
 using PO.EventBus.Abstractions;
+using PO.EventBus.Main.IntegrationEvents.EventHandling;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -82,12 +83,27 @@ namespace PO.BackgroundJob.Main.Controllers
                         var eventMessageUpdateProduct = new OrdersIntegrationEvent(item.OrderCode,item.OrderTime, item.OrderTimeTo,item.DateOfIssue);
                         _eventBus.Publish(eventMessageUpdateProduct);
 
-                        break;
+                        //break;
                     }
                 }
                 return new CustomApiResponse("Successful!");
             }
             catch(Exception ex)
+            {
+                return new CustomApiResponse(ex.Message);
+            }
+        }
+
+
+        [HttpGet("Subscribe")]
+        public CustomApiResponse Subscribe()
+        {
+            try
+            {
+                _eventBus.Subscribe<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
+                return new CustomApiResponse("Successful!");
+            }
+            catch (Exception ex)
             {
                 return new CustomApiResponse(ex.Message);
             }

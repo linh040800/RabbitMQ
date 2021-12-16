@@ -74,7 +74,7 @@ namespace PO.BackgroundJob.Main
             //eventBus.InitPublish<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
 
             //Trường hợp trong 1 ứng dụng vừa gửi vừa nhận xử lý
-            eventBus.Subscribe<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
+            //eventBus.Subscribe<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
 
         }
     }
