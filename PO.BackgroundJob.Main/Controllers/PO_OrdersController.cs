@@ -81,6 +81,8 @@ namespace PO.BackgroundJob.Main.Controllers
                     {
                         var eventMessageUpdateProduct = new OrdersIntegrationEvent(item.OrderCode,item.OrderTime, item.OrderTimeTo,item.DateOfIssue);
                         _eventBus.Publish(eventMessageUpdateProduct);
+
+                        break;
                     }
                 }
                 return new CustomApiResponse("Successful!");

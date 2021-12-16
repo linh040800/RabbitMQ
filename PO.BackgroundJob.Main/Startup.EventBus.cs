@@ -69,10 +69,12 @@ namespace PO.BackgroundJob.Main
             //eventBus.Subscribe<UserCheckoutAcceptedIntegrationEvent, IIntegrationEventHandler<UserCheckoutAcceptedIntegrationEvent>>();
             //eventBus.Subscribe<ProductPriceChangedIntegrationEvent, ProductPriceChangedIntegrationEventHandler>();
 
-            //eventBus.Subscribe<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
 
-            eventBus.InitPublish<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
+            //Với trường hợp chỉ gửi
+            //eventBus.InitPublish<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
 
+            //Trường hợp trong 1 ứng dụng vừa gửi vừa nhận xử lý
+            eventBus.Subscribe<OrdersIntegrationEvent, OrdersIntegrationEventHandler>();
 
         }
     }
