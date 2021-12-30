@@ -11,12 +11,13 @@ namespace PO.BackgroundJob.Main.IntegrationEvents.Events
         public DateTime? OrderTimeTo { get; private init; }
         public DateTime? DateOfIssue { get; private init; }
 
-        public OrdersIntegrationEvent(string orderCode, DateTime orderTime, DateTime? orderTimeTo, DateTime? dateOfIssue)
+        public OrdersIntegrationEvent(string orderCode, DateTime orderTime, DateTime? orderTimeTo, DateTime? dateOfIssue,string method)
         {
             OrderCode = orderCode;
             OrderTime = orderTime;
             OrderTimeTo = orderTimeTo;
             DateOfIssue = dateOfIssue;
+            Method = method;
         }
     }
 }

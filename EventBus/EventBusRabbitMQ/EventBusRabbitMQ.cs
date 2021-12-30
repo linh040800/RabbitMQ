@@ -135,7 +135,7 @@ namespace PO.EventBusRabbitMQ
             //1. Bind eventName(routingKey) into _queueName of _consumerChannel
             DoInternalSubscription(eventName);
 
-            _logger.LogInformation("Subscribing to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
+            _logger.LogInformation("InitPublish to event {EventName} with {EventHandler}", eventName, typeof(TH).GetGenericTypeName());
 
             //2. add event name into Dictionary management
             _subsManager.AddSubscription<T, TH>();
@@ -225,7 +225,9 @@ namespace PO.EventBusRabbitMQ
             _logger.LogTrace("Creating RabbitMQ consumer channel");
             var channel = _persistentConnection.CreateModel();
             channel.ExchangeDeclare(exchange: BROKER_NAME,type: "direct");
-
+            //durable: true Queue persists if RabbitMQ restart 
+            //exclusive: false connection and queue will not clear when that connection is finished
+            //autoDelete: false Queue will be not delete if the last consumer unsubscribe
             channel.QueueDeclare(queue: _queueName,durable: true,exclusive: false,autoDelete: false,arguments: null);
 
             channel.CallbackException += (sender, ea) =>
@@ -247,7 +249,7 @@ namespace PO.EventBusRabbitMQ
         /// <returns></returns>
         private async Task ProcessEvent(string eventName, string message)
         {
-            _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);
+            _logger.LogWarning("Processing RabbitMQ event: {EventName}", eventName);
 
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {
