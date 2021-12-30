@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="zgj3q3gh.42g~" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hub.BackgroundJob.Entities\Hub.BackgroundJob.Entities.csproj" />
+    <ProjectReference Include="..\Hub.BackgroundJob.Repository.Interfaces\Hub.BackgroundJob.Repository.Interfaces.csproj" />
+    <ProjectReference Include="..\Hub.Utilities\Hub.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

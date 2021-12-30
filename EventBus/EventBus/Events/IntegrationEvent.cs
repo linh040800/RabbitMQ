@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Hub.Framework.Enums;
+using System;
 using System.Text.Json.Serialization;
 
-namespace PO.EventBus.Events
+namespace Hub.EventBus.Events
 {
     /// <summary>
     /// Event model 
@@ -25,7 +26,7 @@ namespace PO.EventBus.Events
         public Guid Id { get; private init; }
 
         [JsonInclude]
-        public string Method { get; private init; }
+        public string Method { get; protected init; }
 
         [JsonInclude]
         public DateTime CreationDate { get; private init; }
