@@ -47,7 +47,6 @@ namespace Hub.BackgroundJob.Main
             //Register EvenBus
             services.AddCustomHealthCheck(Configuration);
             this.RegisterEventBus(services);
-            services.AddTransient<IBasketRepository, RedisBasketRepository>();
 
         }
 

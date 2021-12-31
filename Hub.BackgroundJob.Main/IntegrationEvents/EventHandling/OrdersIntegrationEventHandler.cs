@@ -1,12 +1,9 @@
-﻿using Hub.EventBus.Abstractions;
-using Hub.EventBus.Main.IntegrationEvents.Events;
-using Hub.EventBus.Main.Models;
+﻿using Hub.BackgroundJob.Main.IntegrationEvents.Events;
+using Hub.BackgroundJob.Repository.Interfaces;
+using Hub.EventBus.Abstractions;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Hub.BackgroundJob.Main.IntegrationEvents.Events;
-using Hub.BackgroundJob.Repository.Interfaces;
 
 namespace Hub.EventBus.Main.IntegrationEvents.EventHandling
 {
