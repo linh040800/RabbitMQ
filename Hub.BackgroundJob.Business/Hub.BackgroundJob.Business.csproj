@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EventBus\EventBus\Hub.EventBus.csproj" />
     <ProjectReference Include="..\Hub.BackgroundJob.Business.Interfaces\Hub.BackgroundJob.Business.Interfaces.csproj" />
     <ProjectReference Include="..\Hub.BackgroundJob.Repository.Interfaces\Hub.BackgroundJob.Repository.Interfaces.csproj" />
   </ItemGroup>

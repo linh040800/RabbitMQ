@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Hub.BackgroundJob.Main.Middlewares;
 using Hub.BackgroundJob.Repository.Base;
 using Hub.EventBus.Main.Models;
+using Hub.EventBus.Main.IntegrationEvents.EventHandling;
 
 namespace Hub.BackgroundJob.Main
 {
@@ -47,6 +48,9 @@ namespace Hub.BackgroundJob.Main
             //Register EvenBus
             services.AddCustomHealthCheck(Configuration);
             this.RegisterEventBus(services);
+
+            services.AddTransient<OrdersIntegrationEventHandler>();
+
 
         }
 
