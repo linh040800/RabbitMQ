@@ -249,7 +249,7 @@ namespace Hub.EventBusRabbitMQ
         /// <returns></returns>
         private async Task ProcessEvent(string eventName, string message)
         {
-            _logger.LogTrace("Processing RabbitMQ event: {EventName}", eventName);
+            _logger.LogWarning("Processing RabbitMQ event: {EventName}", eventName);
 
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {

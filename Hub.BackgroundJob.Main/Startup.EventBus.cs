@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using Hub.BackgroundJob.Main.IntegrationEvents.Events;
+using Hub.BackgroundJob.Main.Models;
 using Hub.EventBus;
 using Hub.EventBus.Abstractions;
 using Hub.EventBus.Main.IntegrationEvents.EventHandling;
 using Hub.EventBusRabbitMQ;
 using Hub.EventBusRabbitMQ.Abstractions;
-using Hub.Framework.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

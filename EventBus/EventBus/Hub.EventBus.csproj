@@ -3,9 +3,4 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Hub_API\src\Framework\Hub.Framework.csproj" />
-  </ItemGroup>
-
 </Project>

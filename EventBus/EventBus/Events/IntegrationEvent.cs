@@ -1,5 +1,4 @@
-﻿using Hub.Framework.Enums;
-using System;
+﻿using System;
 using System.Text.Json.Serialization;
 
 namespace Hub.EventBus.Events

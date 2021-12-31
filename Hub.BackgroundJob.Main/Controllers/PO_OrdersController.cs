@@ -71,14 +71,24 @@ namespace Hub.BackgroundJob.Main.Controllers
         }
 
         [HttpGet("Publish")]
-        public async Task<CustomApiResponse> Publish() {
+        public async Task<CustomApiResponse> Publish(int numberOfMessages=1) {
             try
             {
-                var result = _mapper.Map<List<PO_OrdersDto>>(await _ordersManager.GetAll());
-
-                if (result != null && result.Count > 0)
+                //var result = _mapper.Map<List<PO_OrdersDto>>(await _ordersManager.GetAll());
+                var addList = new List<PO_Orders>();
+                for (int i = 0; i < numberOfMessages; i++)
                 {
-                    foreach (var item in result)
+                    PO_Orders pO_Orders = new PO_Orders();
+                    pO_Orders.OrderCode = (i + 1) + "";
+                    pO_Orders.OrderTime = DateTime.Now;
+                    pO_Orders.OrderTimeTo = DateTime.Now;
+                    pO_Orders.DateOfIssue = DateTime.Now;
+                    addList.Add(pO_Orders);
+                }
+
+                if (addList != null && addList.Count > 0)
+                {
+                    foreach (var item in addList)
                     {
                         var eventMessageUpdateProduct = new OrdersIntegrationEvent(item.OrderCode,item.OrderTime, item.OrderTimeTo,item.DateOfIssue);
                         _eventBus.Publish(eventMessageUpdateProduct);
