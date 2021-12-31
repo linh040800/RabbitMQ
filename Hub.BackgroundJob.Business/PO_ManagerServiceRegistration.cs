@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Hub.BackgroundJob.Business;
 using System.Linq;
+using Hub.EventBus;
 
 namespace Hub.BackgroundJob.Repository
 {
@@ -12,6 +13,8 @@ namespace Hub.BackgroundJob.Repository
             var types = assembly.ExportedTypes.Where(x => x.IsClass && x.IsPublic && x.Name.EndsWith("Manager"));
 
             foreach (var type in types) services.AddScoped(type.GetInterface($"I{type.Name}"), type);
+
+            services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
         }
     }
 }
