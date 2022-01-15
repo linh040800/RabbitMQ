@@ -1,10 +1,10 @@
-﻿using PO.EventBus.Abstractions;
-using PO.EventBus.Events;
+﻿using Hub.EventBus.Abstractions;
+using Hub.EventBus.Events;
 using System;
 using System.Collections.Generic;
-using static PO.EventBus.InMemoryEventBusSubscriptionsManager;
+using static Hub.EventBus.InMemoryEventBusSubscriptionsManager;
 
-namespace PO.EventBus
+namespace Hub.EventBus
 {
     /// <summary>
     /// 
